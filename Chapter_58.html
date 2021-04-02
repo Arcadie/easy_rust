@@ -270,7 +270,35 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
   14: playground::two_is_two::{{closure}}
              at src/lib.rs:2
 </code></pre>
-<p>So let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
+<p>Edit: Rust improved its backtrace messages in early 2021 to only show the most meaningful information. Now it's much easier to read:</p>
+<pre><code class="language-text">failures:
+
+---- two_is_two stdout ----
+thread 'two_is_two' panicked at 'assertion failed: `(left == right)`
+  left: `2`,
+ right: `3`', src/lib.rs:3:5
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/std/src/panicking.rs:493:5
+   1: core::panicking::panic_fmt
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/panicking.rs:92:14
+   2: playground::two_is_two
+             at ./src/lib.rs:3:5
+   3: playground::two_is_two::{{closure}}
+             at ./src/lib.rs:2:1
+   4: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+   5: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    two_is_two
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+</code></pre>
+<p>Now let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -371,7 +399,7 @@ test tests::one_plus_one_is_two ... FAILED
 </span>const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;; // Don't forget the space at the end
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
     6 // we still return a 6 for now
@@ -425,11 +453,13 @@ test tests::one_plus_one_is_two ... FAILED
 </span>const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
-        panic!(&quot;Please only input numbers, +-, or spaces&quot;);
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric())
+    {
+        panic!(&quot;Please only input numbers, +-, or spaces.&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
     let mut result_vec = vec![]; // Results go in here
     let mut push_string = String::new(); // This is the string we push in every time. We will keep reusing it in the loop.
     for character in input.chars() {
@@ -468,7 +498,10 @@ fn math(input: &amp;str) -&gt; i32 {
     while let Some(entry) = math_iter.next() { // Iter through the items
         if entry.contains('-') { // If it has a - character, check if it's even or odd
             if entry.chars().count() % 2 == 1 {
-                adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue; // Go to the next item
             } else {
                 continue;
@@ -557,7 +590,6 @@ warning: equality checks against true are unnecessary
    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#bool_comparison
 </code></pre>
 <p>This is true: <code>for entry in math_iter</code> is much simpler than <code>while let Some(entry) = math_iter.next()</code>. And a <code>for</code> loop is actually an iterator so we don't have any reason to write <code>.iter()</code>. Thanks, clippy! And also we didn't need to make <code>math_iter</code>: we can just write <code>for entry in result_vec</code>.</p>
-<p>And the second point is true too: <code>if adds == true</code> can just be <code>if adds</code> (because <code>adds</code> = <code>true</code>).</p>
 <p>Now we'll start some real refactoring. Instead of separate variables, we will create a <code>Calculator</code> struct. This will have all the variables we used together. We will change two names to make it more clear. <code>result_vec</code> will become <code>results</code>, and <code>push_string</code> will become <code>current_input</code> (current means &quot;now&quot;). And so far it only has one method: new.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -609,11 +641,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -649,7 +682,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;
@@ -731,11 +767,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -771,7 +808,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;

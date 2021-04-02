@@ -232,7 +232,7 @@ fn main() {
     // This will try 40,000 times to make a char from a u32.
     // The range is 0 (std::u32::MIN) to u32's highest number (std::u32::MAX). If it doesn't work, we will give it '-'.
     for _ in 0..40_000 {
-        let bigger_character = char::try_from(random_generator.gen_range(std::u32::MIN, std::u32::MAX)).unwrap_or('-');
+        let bigger_character = char::try_from(random_generator.gen_range(std::u32::MIN..std::u32::MAX)).unwrap_or('-');
         print!(&quot;{}&quot;, bigger_character)
     }
 }
@@ -435,6 +435,43 @@ truncated: -19
 }
 </code></pre></pre>
 <p>This prints the same thing.</p>
+<p>As of Rust 1.50 (released in February 2021), there is now a method called <code>then()</code>, which turns a <code>bool</code> into an <code>Option</code>. With <code>then()</code> you write a closure, and the closure is called if the item is <code>true</code>. Also, whatever is returned from the closure goes inside the <code>Option</code>. Here's a small example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+
+    let (tru, fals) = (true.then(|| 8), false.then(|| 8));
+    println!(&quot;{:?}, {:?}&quot;, tru, fals);
+}
+</code></pre></pre>
+<p>This just prints <code>Some(8), None</code>.</p>
+<p>And now a bit larger example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let bool_vec = vec![true, false, true, false, false];
+    
+    let option_vec = bool_vec
+        .iter()
+        .map(|item| {
+            item.then(|| { // Put this inside of map so we can pass it on
+                println!(&quot;Got a {}!&quot;, item);
+                &quot;It's true, you know&quot; // This goes inside Some if it's true
+                                      // Otherwise it just passes on None
+            })
+        })
+        .collect::&lt;Vec&lt;_&gt;&gt;();
+
+    println!(&quot;Now we have: {:?}&quot;, option_vec);
+
+    // That printed out the Nones too. Let's filter map them out in a new Vec.
+    let filtered_vec = option_vec.into_iter().filter_map(|c| c).collect::&lt;Vec&lt;_&gt;&gt;();
+
+    println!(&quot;And without the Nones: {:?}&quot;, filtered_vec);
+}
+</code></pre></pre>
+<p>And here's what this prints:</p>
+<pre><code class="language-text">Got a true!
+Got a true!
+Now we have: [Some(&quot;It\'s true, you know&quot;), None, Some(&quot;It\'s true, you know&quot;), None, None]
+And without the Nones: [&quot;It\'s true, you know&quot;, &quot;It\'s true, you know&quot;]
+</code></pre>
 <h3 id="vec"><a class="header" href="#vec">Vec</a></h3>
 <p>Vec has a lot of methods that we haven't looked at yet. Let's start with <code>.sort()</code>. <code>.sort()</code> is not surprising at all. It uses a <code>&amp;mut self</code> to sort a vector.</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -1097,7 +1134,7 @@ The last country is Portugal inside the module rust_book::something::third_mod
 <p><code>cfg!</code></p>
 <p>We know that you can use attributes like <code>#[cfg(test)]</code> and <code>#[cfg(windows)]</code> to tell the compiler what to do in certain cases. When you have <code>test</code>, it will run the code when you run Rust under testing mode (if it's on your computer you type <code>cargo test</code>). And when you use <code>windows</code>, it will run the code if the user is using Windows. But maybe you just want to change one tiny bit of code depending on the operating system, etc. That's when this macro is useful. It returns a <code>bool</code>.</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
-    let helpful_message = if cfg!(windows) { &quot;backslash&quot; } else { &quot;slash&quot; };
+    let helpful_message = if cfg!(target_os = &quot;windows&quot;) { &quot;backslash&quot; } else { &quot;slash&quot; };
 
     println!(
         &quot;...then in your hard drive, type the directory name followed by a {}. Then you...&quot;,

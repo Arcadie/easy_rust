@@ -167,9 +167,10 @@
                     <main>
                         <h2 id="update"><a class="header" href="#update">Update</a></h2>
 <p><img src="https://github.com/Dhghomon/easy_rust/workflows/github%20pages/badge.svg" alt="example workflow name" /></p>
+<p>2 April 2021: <a href="https://www.buymeacoffee.com/mithridates">Added BuyMeACoffee link</a> for those who would like to buy me a coffee.</p>
+<p>1 February 2021: <a href="https://www.youtube.com/playlist?list=PLfllocyHVgsRwLkTAhG0E-2QxCf-ozBkk">Now available on YouTube!</a> Two months later: all done as of 1 April 2021 for 186 videos in total (slightly over 23 hours).</p>
 <p>22 December 2020: mdBook can be found <a href="https://dhghomon.github.io/easy_rust">here</a>.</p>
 <p>28 November 2020: <a href="https://github.com/kumakichi/easy_rust_chs">Now also available in simplified Chinese</a> thanks to <a href="https://github.com/kumakichi">kumakichi</a>!</p>
-<p>1 February 2021: <a href="https://www.youtube.com/playlist?list=PLfllocyHVgsRwLkTAhG0E-2QxCf-ozBkk">Now available on YouTube!</a></p>
 <p><img src="Easy_Rust_sample_image.png" alt="" /></p>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>Rust is a new language that already has good textbooks. But sometimes its textbooks are difficult because they are for native English speakers. Many companies and people now learn Rust, and they could learn faster with a book that has easy English. This textbook is for these companies and people to learn Rust with simple English.</p>
@@ -287,11 +288,11 @@
 <li><a href="Chapter_3.html#interior-mutability">Interior mutability</a>
 <ul>
 <li><a href="Chapter_3.html#cell">Cell</a></li>
-</ul>
-</li>
 <li><a href="Chapter_3.html#refcell">RefCell</a></li>
 <li><a href="Chapter_3.html#mutex">Mutex</a></li>
 <li><a href="Chapter_3.html#rwlock">RwLock</a></li>
+</ul>
+</li>
 <li><a href="Chapter_3.html#cow">Cow</a></li>
 <li><a href="Chapter_3.html#type-aliases">Type aliases</a>
 <ul>
@@ -1532,7 +1533,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>So it's almost like saying <code>let my_number = { 100 };</code>.</p>
-<p>Also note that <code>my_number</code> is not <code>mut</code>. We didn't give it a value until we gave it 50, so it never changed its value. In the end, the real code for <code>my_number</code> is just let <code>my_number = 100;</code>.</p>
+<p>Also note that <code>my_number</code> is not <code>mut</code>. We didn't give it a value until we gave it 50, so it never changed its value. In the end, the real code for <code>my_number</code> is just <code>let my_number = 100;</code>.</p>
 <h2 id="collection-types"><a class="header" href="#collection-types">Collection types</a></h2>
 <p>Rust has a lot of types for making a collection. Collections are for when you need more than one value in one spot. For example, you could have information on all the cities in your country inside one variable. We will start with arrays, which are fastest but also have the least functionality. They are kind of like <code>&amp;str</code> in that way.</p>
 <h3 id="arrays"><a class="header" href="#arrays">Arrays</a></h3>
@@ -2919,7 +2920,9 @@ fn main() {
     );
 }
 </code></pre></pre>
-<p>The message is: &quot;thread 'main' panicked at 'called <code>Option::unwrap()</code> on a <code>None</code> value', src\main.rs:14:9&quot;.</p>
+<p>The message is:</p>
+<pre><code class="language-text">thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', src\main.rs:14:9
+</code></pre>
 <p>But we don't need to use <code>.unwrap()</code>. We can use a <code>match</code>. Then we can print the value we have <code>Some</code>, and not touch it if we have <code>None</code>. For example:</p>
 <pre><pre class="playground"><code class="language-rust">fn take_fifth(value: Vec&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     if value.len() &lt; 4 {
@@ -3022,7 +3025,7 @@ enum Result&lt;T, E&gt; {
 
 fn main() {}
 </code></pre></pre>
-<p>So Result has a value inside of <code>Ok</code>, and a value inside of <code>Err</code>. That is because errors usually (and should have) have information inside them.</p>
+<p>So Result has a value inside of <code>Ok</code>, and a value inside of <code>Err</code>. That is because errors usually contain information that describes the error.</p>
 <p><code>Result&lt;T, E&gt;</code> means you need to think of what you want to return for <code>Ok</code>, and what you want to return for <code>Err</code>. Actually, you can decide anything. Even this is okay:</p>
 <pre><pre class="playground"><code class="language-rust">fn check_error() -&gt; Result&lt;(), ()&gt; {
     Ok(())
@@ -3336,7 +3339,7 @@ Do we have L'Allemagne Moderne? true
 </span>pub fn entry(&amp;mut self, key: K) -&gt; Entry&lt;K, V&gt; // 🚧
 <span class="boring">}
 </span></code></pre></pre>
-<p><a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html">Here is the page for Entry</a>. Here is a simple version of its code. <code>K</code> means key and <code>V</code> means variable.</p>
+<p><a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html">Here is the page for Entry</a>. Here is a simple version of its code. <code>K</code> means key and <code>V</code> means value.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3882,7 +3885,7 @@ fn main() {
 </code></pre></pre>
 <p>This prints <code>0</code> because <code>.unwrap_or(&amp;0)</code> gives a 0 even if it is a <code>None</code>.</p>
 <h2 id="traits"><a class="header" href="#traits">Traits</a></h2>
-<p>We have seen traits before: <code>Debug</code>, <code>Copy</code>, <code>Clone</code> are all traits. To give a type a trait, you have to implement it. Because <code>Debug</code> and the others are so common, we have attributes that automatically do it. That's what happens you write <code>#[derive(Debug)]</code>: you are automatically implementing <code>Debug</code>.</p>
+<p>We have seen traits before: <code>Debug</code>, <code>Copy</code>, <code>Clone</code> are all traits. To give a type a trait, you have to implement it. Because <code>Debug</code> and the others are so common, we have attributes that automatically do it. That's what happens when you write <code>#[derive(Debug)]</code>: you are automatically implementing <code>Debug</code>.</p>
 <pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
 struct MyStruct {
     number: usize,
@@ -5435,6 +5438,7 @@ None
 [5, 6, 7]
 [6, 7, 8]
 [7, 8, 9]
+[8, 9, 0]
 </code></pre>
 <p>By the way, <code>.chunks()</code> will panic if you give it nothing. You can write <code>.chunks(1000)</code> for a vector with one item, but you can't write <code>.chunks()</code> with anything with a length of 0. You can see that right in the function if you click on [src] because it says <code>assert!(chunk_size != 0);</code>.</p>
 <p><code>.match_indices()</code> lets you pull out everything inside a <code>String</code> or <code>&amp;str</code> that matches your input, and gives you the index too. It is similar to <code>.enumerate()</code> because it returns a tuple with two items.</p>
@@ -6474,7 +6478,7 @@ fn give_direction(direction: &amp;MapDirection) {
     }
 }
 </code></pre></pre>
-<p>We've seen that <code>::*</code> means &quot;import everything after the ::&quot;. In our case, that means <code>North</code>, <code>NorthEast</code>...and all the way to <code>NorthWest</code>. When you import other people's code you can do that too, but if the code is very large you might have problems. What if it has some items that are the same as your code? So it's usually best to not use <code>::*</code> all the time unless you're sure. A lot of times you see  a section called <code>prelude</code> in other people's code with all the main items you probably need. So then you will usually use it like this: <code>name::predule::*</code>. We will talk about this more in the sections for <code>modules</code> and <code>crates</code>.</p>
+<p>We've seen that <code>::*</code> means &quot;import everything after the ::&quot;. In our case, that means <code>North</code>, <code>NorthEast</code>...and all the way to <code>NorthWest</code>. When you import other people's code you can do that too, but if the code is very large you might have problems. What if it has some items that are the same as your code? So it's usually best to not use <code>::*</code> all the time unless you're sure. A lot of times you see  a section called <code>prelude</code> in other people's code with all the main items you probably need. So then you will usually use it like this: <code>name::prelude::*</code>. We will talk about this more in the sections for <code>modules</code> and <code>crates</code>.</p>
 <p>You can also use <code>as</code> to change the name. For example, maybe you are using someone else's code and you can't change the names in an enum:</p>
 <pre><pre class="playground"><code class="language-rust">enum FileState {
     CannotAccessFile,
@@ -7076,17 +7080,17 @@ fn main() {
 <span class="boring">}
 </span></code></pre></pre>
 <p><code>fn map&lt;B, F&gt;(self, f: F)</code> mean that it takes two generic types. <code>F</code> is a function that takes one item from the container implementing <code>.map()</code> and <code>B</code> is the return type of that function. Then after the <code>where</code> we see the trait bounds. (&quot;Trait bound&quot; means &quot;it must have this trait&quot;.) One is <code>Sized</code>, and the next is the closure signature. It must be an <code>FnMut</code>, and do the closure on <code>Self::Item</code>, which is the iterator that you give it. Then it returns <code>B</code>.</p>
-<p>So we can do the same thing to return a closure. To return a closure, use <code>impl</code> and then the closure signature. Once you return it, you can use it just like a function. Here is a small example of a function that gives you a closure depending on the number you put in. If you put 2 or 40 in then it multiplies it, and otherwise it gives you the same number. Because it's a closure we can do anything we want, so we also print a message.</p>
-<pre><pre class="playground"><code class="language-rust">fn returns_a_closure(input: u8) -&gt; impl FnMut(i32) -&gt; i32 {
+<p>So we can do the same thing to return a closure. To return a closure, use <code>impl</code> and then the closure signature. Once you return it, you can use it just like a function. Here is a small example of a function that gives you a closure depending on the text you put in. If you put &quot;double&quot; or &quot;triple&quot; in then it multiplies it by 2 or 3, and otherwise it gives you the same number. Because it's a closure we can do anything we want, so we also print a message.</p>
+<pre><pre class="playground"><code class="language-rust">fn returns_a_closure(input: &amp;str) -&gt; impl FnMut(i32) -&gt; i32 {
     match input {
-        2 =&gt; |mut number| {
+        &quot;double&quot; =&gt; |mut number| {
             number *= 2;
-            println!(&quot;Your number is {}&quot;, number);
+            println!(&quot;Doubling number. Now it is {}&quot;, number);
             number
         },
-        40 =&gt; |mut number| {
+        &quot;triple&quot; =&gt; |mut number| {
             number *= 40;
-            println!(&quot;Your number is {}&quot;, number);
+            println!(&quot;Tripling number. Now it is {}&quot;, number);
             number
         },
         _ =&gt; |number| {
@@ -7100,13 +7104,13 @@ fn main() {
     let my_number = 10;
 
     // Make three closures
-    let mut give_two = returns_a_closure(2);
-    let mut give_forty = returns_a_closure(40);
-    let mut give_fifty = returns_a_closure(50);
+    let mut doubles = returns_a_closure(&quot;double&quot;);
+    let mut triples = returns_a_closure(&quot;triple&quot;);
+    let mut quadruples = returns_a_closure(&quot;quadruple&quot;);
 
-    give_two(my_number);
-    give_forty(my_number);
-    give_fifty(my_number);
+    doubles(my_number);
+    triples(my_number);
+    quadruples(my_number);
 }
 </code></pre></pre>
 <p>Here is a bit longer example. Let's imagine a game where your character is facing monsters that are stronger at night. We can make an enum called <code>TimeOfDay</code> to keep track of the day. Your character is named Simon and has a number called <code>character_fear</code>, which is an <code>f64</code>. It goes up at night and down during the day. We will make a <code>change_fear</code> function that changes his fear, but also does other things like write messages. It could look like this:</p>
@@ -7496,35 +7500,52 @@ fn main() {
 }
 </code></pre></pre>
 <p>Now the results are in our vec: <code>[&quot;Send a &amp;str this time&quot;, &quot;And here is another &amp;str&quot;]</code>.</p>
-<p>Now let's pretend that we have a lot of work to do, and want to use threads. We have a big vec with 1000 items, all 0. We want to change each 0 to a 1. We will use ten threads, and each thread will do one tenth of the work. We will create a new vec and use <code>.extend()</code> to put the work in.</p>
+<p>Now let's pretend that we have a lot of work to do, and want to use threads. We have a big vec with 1 million items, all 0. We want to change each 0 to a 1. We will use ten threads, and each thread will do one tenth of the work. We will create a new vec and use <code>.extend()</code> to put the work in.</p>
 <pre><pre class="playground"><code class="language-rust">use std::sync::mpsc::channel;
+use std::thread::spawn;
 
 fn main() {
     let (sender, receiver) = channel();
-    let hugevec = vec![0; 1000];
+    let hugevec = vec![0; 1_000_000];
     let mut newvec = vec![];
+    let mut handle_vec = vec![];
 
     for i in 0..10 {
         let sender_clone = sender.clone();
         let mut work: Vec&lt;u8&gt; = Vec::with_capacity(hugevec.len() / 10); // new vec to put the work in. 1/10th the size
-        work.extend(&amp;hugevec[i*100..(i+1)*100]); // first part gets 0..100, next gets 100..200, etc.
-        let handle = std::thread::spawn(move || { // make a handle
+        work.extend(&amp;hugevec[i*100_000..(i+1)*100_000]); // first part gets 0..100_000, next gets 100_000..200_000, etc.
+        let handle =spawn(move || { // make a handle
 
             for number in work.iter_mut() { // do the actual work
                 *number += 1;
             };
             sender_clone.send(work).unwrap(); // use the sender_clone to send the work to the receiver
         });
-
-        handle.join().unwrap(); // stop the thread until it's done
-        newvec.push(receiver.recv().unwrap()); // push the results from receiver.recv() into the vec
+        handle_vec.push(handle);
+    }
+    
+    for handle in handle_vec { // stop until the threads are done
+        handle.join().unwrap();
+    }
+    
+    while let Ok(results) = receiver.try_recv() {
+        newvec.push(results); // push the results from receiver.recv() into the vec
     }
 
     // Now we have a Vec&lt;Vec&lt;u8&gt;&gt;. To put it together we can use .flatten()
-    let newvec = newvec.into_iter().flatten().collect::&lt;Vec&lt;u8&gt;&gt;(); // Now it's one vec of 1000 u8 numbers
+    let newvec = newvec.into_iter().flatten().collect::&lt;Vec&lt;u8&gt;&gt;(); // Now it's one vec of 1_000_000 u8 numbers
+    
+    println!(&quot;{:?}, {:?}, total length: {}&quot;, // Let's print out some numbers to make sure they are all 1
+        &amp;newvec[0..10], &amp;newvec[newvec.len()-10..newvec.len()], newvec.len() // And show that the length is 1_000_000 items
+    );
+    
+    for number in newvec { // And let's tell Rust that it can panic if even one number is not 1
+        if number != 1 {
+            panic!();
+        }
+    }
 }
 </code></pre></pre>
-<p>If you print this you can see 1000 number 1s.</p>
 <h2 id="reading-rust-documentation"><a class="header" href="#reading-rust-documentation">Reading Rust documentation</a></h2>
 <p>It's important to know how to read documentation in Rust so you can understand what other people wrote. Here are some things to know in Rust documentation:</p>
 <h3 id="assert_eq"><a class="header" href="#assert_eq">assert_eq!</a></h3>
@@ -8943,7 +8964,35 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
   14: playground::two_is_two::{{closure}}
              at src/lib.rs:2
 </code></pre>
-<p>So let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
+<p>Edit: Rust improved its backtrace messages in early 2021 to only show the most meaningful information. Now it's much easier to read:</p>
+<pre><code class="language-text">failures:
+
+---- two_is_two stdout ----
+thread 'two_is_two' panicked at 'assertion failed: `(left == right)`
+  left: `2`,
+ right: `3`', src/lib.rs:3:5
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/std/src/panicking.rs:493:5
+   1: core::panicking::panic_fmt
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/panicking.rs:92:14
+   2: playground::two_is_two
+             at ./src/lib.rs:3:5
+   3: playground::two_is_two::{{closure}}
+             at ./src/lib.rs:2:1
+   4: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+   5: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    two_is_two
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+</code></pre>
+<p>Now let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9044,7 +9093,7 @@ test tests::one_plus_one_is_two ... FAILED
 </span>const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;; // Don't forget the space at the end
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
     6 // we still return a 6 for now
@@ -9098,11 +9147,13 @@ test tests::one_plus_one_is_two ... FAILED
 </span>const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
-        panic!(&quot;Please only input numbers, +-, or spaces&quot;);
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric())
+    {
+        panic!(&quot;Please only input numbers, +-, or spaces.&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
     let mut result_vec = vec![]; // Results go in here
     let mut push_string = String::new(); // This is the string we push in every time. We will keep reusing it in the loop.
     for character in input.chars() {
@@ -9141,7 +9192,10 @@ fn math(input: &amp;str) -&gt; i32 {
     while let Some(entry) = math_iter.next() { // Iter through the items
         if entry.contains('-') { // If it has a - character, check if it's even or odd
             if entry.chars().count() % 2 == 1 {
-                adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue; // Go to the next item
             } else {
                 continue;
@@ -9230,7 +9284,6 @@ warning: equality checks against true are unnecessary
    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#bool_comparison
 </code></pre>
 <p>This is true: <code>for entry in math_iter</code> is much simpler than <code>while let Some(entry) = math_iter.next()</code>. And a <code>for</code> loop is actually an iterator so we don't have any reason to write <code>.iter()</code>. Thanks, clippy! And also we didn't need to make <code>math_iter</code>: we can just write <code>for entry in result_vec</code>.</p>
-<p>And the second point is true too: <code>if adds == true</code> can just be <code>if adds</code> (because <code>adds</code> = <code>true</code>).</p>
 <p>Now we'll start some real refactoring. Instead of separate variables, we will create a <code>Calculator</code> struct. This will have all the variables we used together. We will change two names to make it more clear. <code>result_vec</code> will become <code>results</code>, and <code>push_string</code> will become <code>current_input</code> (current means &quot;now&quot;). And so far it only has one method: new.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -9282,11 +9335,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -9322,7 +9376,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;
@@ -9404,11 +9461,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if let false = input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -9444,7 +9502,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;
@@ -9579,7 +9640,7 @@ fn three_die_six() -&gt; u8 { // A &quot;die&quot; is the thing you throw to get
     let mut generator = thread_rng(); // Create our random number generator
     let mut stat = 0; // This is the total
     for _ in 0..3 {
-        stat += generator.gen_range(1, 7); // Add each time
+        stat += generator.gen_range(1..=6); // Add each time
     }
     stat // Return the total
 }
@@ -9588,17 +9649,22 @@ fn four_die_six() -&gt; u8 {
     let mut generator = thread_rng();
     let mut results = vec![]; // First put the numbers in a vec
     for _ in 0..4 {
-        results.push(generator.gen_range(1, 7));
+        results.push(generator.gen_range(1..=6));
     }
     results.sort(); // Now a result like [4, 3, 2, 6] becomes [2, 3, 4, 6]
     results.remove(0); // Now it would be [3, 4, 6]
     results.iter().sum() // Return this result
 }
 
+enum Dice {
+    Three,
+    Four
+}
+
 impl Character {
-    fn new(three_dice: bool) -&gt; Self { // true for three dice, false for four
-        match three_dice {
-            true =&gt; Self {
+    fn new(dice: Dice) -&gt; Self { // true for three dice, false for four
+        match dice {
+            Dice::Three =&gt; Self {
                 strength: three_die_six(),
                 dexterity: three_die_six(),
                 constitution: three_die_six(),
@@ -9606,7 +9672,7 @@ impl Character {
                 wisdom: three_die_six(),
                 charisma: three_die_six(),
             },
-            false =&gt; Self {
+            Dice::Four =&gt; Self {
                 strength: four_die_six(),
                 dexterity: four_die_six(),
                 constitution: four_die_six(),
@@ -9646,8 +9712,8 @@ charisma: {}&quot;,
 
 
 fn main() {
-    let weak_billy = Character::new(true);
-    let strong_billy = Character::new(false);
+    let weak_billy = Character::new(Dice::Three);
+    let strong_billy = Character::new(Dice::Four);
     weak_billy.display();
     strong_billy.display();
 }
@@ -9784,7 +9850,7 @@ fn main() {
     // This will try 40,000 times to make a char from a u32.
     // The range is 0 (std::u32::MIN) to u32's highest number (std::u32::MAX). If it doesn't work, we will give it '-'.
     for _ in 0..40_000 {
-        let bigger_character = char::try_from(random_generator.gen_range(std::u32::MIN, std::u32::MAX)).unwrap_or('-');
+        let bigger_character = char::try_from(random_generator.gen_range(std::u32::MIN..std::u32::MAX)).unwrap_or('-');
         print!(&quot;{}&quot;, bigger_character)
     }
 }
@@ -9987,6 +10053,43 @@ truncated: -19
 }
 </code></pre></pre>
 <p>This prints the same thing.</p>
+<p>As of Rust 1.50 (released in February 2021), there is now a method called <code>then()</code>, which turns a <code>bool</code> into an <code>Option</code>. With <code>then()</code> you write a closure, and the closure is called if the item is <code>true</code>. Also, whatever is returned from the closure goes inside the <code>Option</code>. Here's a small example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+
+    let (tru, fals) = (true.then(|| 8), false.then(|| 8));
+    println!(&quot;{:?}, {:?}&quot;, tru, fals);
+}
+</code></pre></pre>
+<p>This just prints <code>Some(8), None</code>.</p>
+<p>And now a bit larger example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let bool_vec = vec![true, false, true, false, false];
+    
+    let option_vec = bool_vec
+        .iter()
+        .map(|item| {
+            item.then(|| { // Put this inside of map so we can pass it on
+                println!(&quot;Got a {}!&quot;, item);
+                &quot;It's true, you know&quot; // This goes inside Some if it's true
+                                      // Otherwise it just passes on None
+            })
+        })
+        .collect::&lt;Vec&lt;_&gt;&gt;();
+
+    println!(&quot;Now we have: {:?}&quot;, option_vec);
+
+    // That printed out the Nones too. Let's filter map them out in a new Vec.
+    let filtered_vec = option_vec.into_iter().filter_map(|c| c).collect::&lt;Vec&lt;_&gt;&gt;();
+
+    println!(&quot;And without the Nones: {:?}&quot;, filtered_vec);
+}
+</code></pre></pre>
+<p>And here's what this prints:</p>
+<pre><code class="language-text">Got a true!
+Got a true!
+Now we have: [Some(&quot;It\'s true, you know&quot;), None, Some(&quot;It\'s true, you know&quot;), None, None]
+And without the Nones: [&quot;It\'s true, you know&quot;, &quot;It\'s true, you know&quot;]
+</code></pre>
 <h3 id="vec"><a class="header" href="#vec">Vec</a></h3>
 <p>Vec has a lot of methods that we haven't looked at yet. Let's start with <code>.sort()</code>. <code>.sort()</code> is not surprising at all. It uses a <code>&amp;mut self</code> to sort a vector.</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -10649,7 +10752,7 @@ The last country is Portugal inside the module rust_book::something::third_mod
 <p><code>cfg!</code></p>
 <p>We know that you can use attributes like <code>#[cfg(test)]</code> and <code>#[cfg(windows)]</code> to tell the compiler what to do in certain cases. When you have <code>test</code>, it will run the code when you run Rust under testing mode (if it's on your computer you type <code>cargo test</code>). And when you use <code>windows</code>, it will run the code if the user is using Windows. But maybe you just want to change one tiny bit of code depending on the operating system, etc. That's when this macro is useful. It returns a <code>bool</code>.</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
-    let helpful_message = if cfg!(windows) { &quot;backslash&quot; } else { &quot;slash&quot; };
+    let helpful_message = if cfg!(target_os = &quot;windows&quot;) { &quot;backslash&quot; } else { &quot;slash&quot; };
 
     println!(
         &quot;...then in your hard drive, type the directory name followed by a {}. Then you...&quot;,
@@ -11194,7 +11297,7 @@ You entered: words
 fn main() {
     let input = args();
 
-    input.into_iter().skip(1).for_each(|item| {
+    input.skip(1).for_each(|item| {
         println!(&quot;You wrote {}, which in capital letters is {}&quot;, item, item.to_uppercase());
     })
 }
@@ -11209,28 +11312,40 @@ You wrote words, which in capital letters is WORDS
 <p>One common use for <code>Args</code> is for user settings. You can make sure that the user writes the input you need, and only run the program if it's right. Here's a small program that either makes letters big (capital) or small (lowercase):</p>
 <pre><pre class="playground"><code class="language-rust">use std::env::args;
 
-fn main() {
-    let keywords = [&quot;capital&quot;.to_string(), &quot;lowercase&quot;.to_string()]; // User needs to write one of these after cargo run
-    let input_vec = args().into_iter().collect::&lt;Vec&lt;String&gt;&gt;(); // Make a vec of all the args
+enum Letters {
+    Capitalize,
+    Lowercase,
+    Nothing,
+}
 
-    if input_vec.len() &gt; 2 &amp;&amp; keywords.contains(&amp;input_vec[1].to_lowercase()) { // It must be at least 3 in length, and the user needs to write either &quot;capital&quot; or &quot;lowercase&quot;.
-                                                                                // We use .to_lowercase() so the user can write &quot;Capital&quot; or &quot;CAPITAL&quot;, etc.
-        if input_vec[1].to_lowercase() == &quot;capital&quot; {
-            input_vec.into_iter().skip(2).for_each(|word| println!(&quot;{}&quot;, word.to_uppercase()));
-        } else {
-            input_vec.into_iter().skip(2).for_each(|word| println!(&quot;{}&quot;, word.to_lowercase()));
+fn main() {
+    let mut changes = Letters::Nothing;
+    let input = args().collect::&lt;Vec&lt;_&gt;&gt;();
+
+    if input.len() &gt; 2 {
+        match input[1].as_str() {
+            &quot;capital&quot; =&gt; changes = Letters::Capitalize,
+            &quot;lowercase&quot; =&gt; changes = Letters::Lowercase,
+            _ =&gt; {}
         }
-    } else {
-        println!(r#&quot;Please write either &quot;capital&quot; or &quot;lowercase&quot; and then some input.&quot;#);
     }
+
+    for word in input.iter().skip(2) {
+      match changes {
+        Letters::Capitalize =&gt; println!(&quot;{}&quot;, word.to_uppercase()),
+        Letters::Lowercase =&gt; println!(&quot;{}&quot;, word.to_lowercase()),
+        _ =&gt; println!(&quot;{}&quot;, word)
+      }
+    }
+    
 }
 </code></pre></pre>
 <p>Here are some examples of what it gives:</p>
 <p>Input: <code>cargo run please make capitals</code>:</p>
-<pre><code class="language-text">Please write either &quot;capital&quot; or &quot;lowercase&quot; and then some input.
+<pre><code class="language-text">make capitals
 </code></pre>
 <p>Input: <code>cargo run capital</code>:</p>
-<pre><code class="language-text">Please write either &quot;capital&quot; or &quot;lowercase&quot; and then some input.
+<pre><code class="language-text">// Nothing here...
 </code></pre>
 <p>Input: <code>cargo run capital I think I understand now</code>:</p>
 <pre><code class="language-text">I
